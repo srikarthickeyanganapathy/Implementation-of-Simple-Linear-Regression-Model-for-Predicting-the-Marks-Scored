@@ -95,8 +95,19 @@ print("For population = 70,000, we predict a profit of $"+str(round(predict2,0))
 ```
 
 ## Output:
-![simple linear regression model for predicting the marks scored](sam.png)
-
-
+### PROFIT PREDICTION:
+![sam.png](https://user-images.githubusercontent.com/115707860/229810205-e3213d36-1d63-4814-9403-c6443c0f8d34.png))
+### COST FUNCTION:
+![out](https://user-images.githubusercontent.com/115707860/229810399-a24dc2e0-3767-4363-a598-442a9c08b9cb.png)
+### GRADIENT DESCENT:
+![out](https://user-images.githubusercontent.com/115707860/229810569-1349a4dc-1e6b-4ecb-a97e-4c664e1a649f.png)
+### COST FUNCTION USING GRADIENT DESCENT:
+![out](https://user-images.githubusercontent.com/115707860/229810861-8bb4ce4e-4e44-4cea-a773-b175a93c7bc6.png)
+### GRAPH WITH BEST FIT LINE (PROFIT PREDICTION):
+![out](https://user-images.githubusercontent.com/115707860/229811328-621bb11e-0b69-4642-a370-678aaf263177.png)
+### PROFIT PREDICTION FOR A POPULATION OF 35,000:
+![out](https://user-images.githubusercontent.com/115707860/229811762-82adce62-6abf-49bd-b9f8-2eca2fb80725.png)
+### PROFIT PREDICTION FOR A POPULATION OF 70,000:
+![out](https://user-images.githubusercontent.com/115707860/229811946-3177730d-a45c-4243-8f4c-0f3d81813120.png)
 ## Result:
 Thus the program to implement the simple linear regression model for predicting the marks scored is written and verified using python programming.
