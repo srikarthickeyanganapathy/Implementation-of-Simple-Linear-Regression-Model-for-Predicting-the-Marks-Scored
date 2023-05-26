@@ -8,10 +8,10 @@ To write a program to predict the marks scored by a student using the simple lin
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. Import pandas, numpy and mathplotlib.pyplot.
-2. Trace the best fit line and calculate the cost function.
-3. Calculate the gradient descent and plot the graph for it.
-4. Predict the profit for two population sizes.
+1. Import pandas, numpy and sklearn
+2. Calculate the values for the training data set
+3. Calculate the values for the test data set
+4. Plot the graph for both the data sets and calculate for MAE, MSE and RMSE
 
 ## Program:
 ```
@@ -19,95 +19,88 @@ Program to implement the linear regression using gradient descent.
 Developed by: SRI KARTHICKEYAN GANAPATHY
 RegisterNumber: 212222240102
 
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+df=pd.read_csv('/student_scores.csv')
+#Displying the contents in datafile
+df.head()
 
-data=pd.read_csv("/ex1.txt",header=None)
+df.tail()
 
-plt.scatter(data[0],data[1])
-plt.xticks(np.arange(5,30,step=5))
-plt.yticks(np.arange(-5,30,step=5))
-plt.xlabel("Population of City(10,000s)")
-plt.ylabel("Profit ($10,000)")
-plt.title("Profit Prediction")
+#Segregating data to variables
+X=df.iloc[:,:-1].values
+X
 
-def computeCost(X,y,theta):
-  """
-  Take in a numpy array X, y , theta and generate the cost fuction in a linear regression model
-  """
-  m=len(y)
-  h=X.dot(theta)  # length of training data
-  square_err=(h-y)**2 
+Y=df.iloc[:,-1].values
+Y
 
-  return 1/(2*m) * np.sum(square_err)  
-  
-  data_n=data.values
-m=data_n[:,0].size
-X=np.append(np.ones((m,1)),data_n[:,0].reshape(m,1),axis=1)
-y=data_n[:,1].reshape(m,1)
-theta=np.zeros((2,1))
+from sklearn.model_selection import train_test_split
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=1/3,random_state=0)
 
-computeCost(X,y,theta)   # function call
+from sklearn.linear_model import LinearRegression
+regressor=LinearRegression()
+regressor.fit(X_train,Y_train)
+Y_pred=regressor.predict(X_test)
 
-def gradientDescent(X,y,theta,alpha,num_iters):
-  """
-  """
-  m=len(y)
-  J_history=[]
+#displaying the predicted values
+Y_pred
 
-  for i in range(num_iters):
-    predictions=X.dot(theta)
-    error=np.dot(X.transpose(),(predictions - y))
-    descent=alpha * 1/m * error
-    theta-=descent
-    J_history.append(computeCost(X,y,theta))
+#displaying the actual values
+Y_test
 
-  return theta, J_history
-  
-theta,J_history = gradientDescent(X,y,theta,0.01,1500)
-print("h(x) ="+str(round(theta[0,0],2))+" + "+str(round(theta[1,0],2))+"x1")
+#graph plot for training data
+plt.scatter(X_train,Y_train,color="orange")
+plt.plot(X_train,regressor.predict(X_train),color="green")
+plt.title("Hours vs Scores(Training Set)")
+plt.xlabel("Hours")
+plt.ylabel("Scores")
+plt.show()
 
-plt.plot(J_history)
-plt.xlabel("Iternations")
-plt.ylabel("$J(\Theta)$")
-plt.title("Cost function using Gradient Descent")
+#graph plot for test data
+plt.scatter(X_test,Y_test,color="blue")
+plt.plot(X_test,regressor.predict(X_test),color="black")
+plt.title("Hours vs Scores(Test Set)")
+plt.xlabel("Hours")
+plt.ylabel("Scores")
+plt.show()
 
-plt.scatter(data[0],data[1])
-x_value=[x for x in range(25)]
-y_value=[y*theta[1]+theta[0] for y in x_value]
-plt.plot(x_value,y_value,color="r")
-plt.xticks(np.arange(5,30,step=5))
-plt.yticks(np.arange(-5,30,step=5))
-plt.xlabel("Polpulation of City (10,000s)")
-plt.ylabel("Profit (10,000s)")
-plt.title("Profit Prediction")
-
-def predict(x,theta):
-  predictions= np.dot(theta.transpose(),x)
-  return predictions[0]
-  
- predict1=predict(np.array([1,3.5]),theta)*10000
-print("For population = 35,000, we predict a profit of $"+str(round(predict1,0)))
-
-predict2=predict(np.array([1,7]),theta)*10000
-print("For population = 70,000, we predict a profit of $"+str(round(predict2,0)))
+mse=mean_squared_error(Y_test,Y_pred)
+print('MSE= ',mse)
+mae=mean_absolute_error(Y_test,Y_pred)
+print("MAE= ",mae)
+rmse=np.sqrt(mse)
+print("RMSE= ",rmse)
 ```
 
 ## Output:
-### PROFIT PREDICTION:
-![sam.png](https://user-images.githubusercontent.com/115707860/229810205-e3213d36-1d63-4814-9403-c6443c0f8d34.png))
-### COST FUNCTION:
-![out](https://user-images.githubusercontent.com/115707860/229810399-a24dc2e0-3767-4363-a598-442a9c08b9cb.png)
-### GRADIENT DESCENT:
-![out](https://user-images.githubusercontent.com/115707860/229810569-1349a4dc-1e6b-4ecb-a97e-4c664e1a649f.png)
-### COST FUNCTION USING GRADIENT DESCENT:
-![out](https://user-images.githubusercontent.com/115707860/229810861-8bb4ce4e-4e44-4cea-a773-b175a93c7bc6.png)
-### GRAPH WITH BEST FIT LINE (PROFIT PREDICTION):
-![out](https://user-images.githubusercontent.com/115707860/229811328-621bb11e-0b69-4642-a370-678aaf263177.png)
-### PROFIT PREDICTION FOR A POPULATION OF 35,000:
-![out](https://user-images.githubusercontent.com/115707860/229811762-82adce62-6abf-49bd-b9f8-2eca2fb80725.png)
-### PROFIT PREDICTION FOR A POPULATION OF 70,000:
-![out](https://user-images.githubusercontent.com/115707860/229811946-3177730d-a45c-4243-8f4c-0f3d81813120.png)
+### df.head():
+![mll 1](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/7eeecb9e-dda5-4745-9a14-5e9f31f7dabc)
+
+### df.tail():
+![mll 2](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/9ce25f08-9237-4cab-b66d-1de58c4e8326)
+
+### X:
+![mll 3](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/e3b7f790-dc18-40b3-97d6-fac227f58fc5)
+
+### Y:
+![mll 4](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/6ad2b1ce-1737-4707-936e-51e63bd171ae)
+
+### PREDICTED Y VALUES:
+![mll 5](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/289a03ec-1dbc-4193-bbfc-3b126ac4af4d)
+
+### ACTUAL Y VALUES:
+![mll 6](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/1fbe8c04-fc66-4f0a-b598-532d2e4f993e)
+
+### GRAPH FOR TRAINING DATA:
+![mll 7](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/4bd6cd90-3db7-4ffc-93bf-a39dc4fd6504)
+
+### GRAPH FOR TEST DATA:
+![mll 8](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/7abbff2a-4d3f-48e5-bc38-ff6156cd853d)
+
+### MEAN SQUARE ERROR, MEAN ABSOLUTE ERROR AND RMSE:
+![mll 9](https://github.com/srikarthickeyanganapathy/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/119393842/f0123eb6-bbc1-4b3e-aad8-4ff724e44bca)
+
 ## Result:
 Thus the program to implement the simple linear regression model for predicting the marks scored is written and verified using python programming.
